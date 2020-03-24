@@ -11,10 +11,17 @@ export class Partie {
         this.tabMechants = this.generationMechants();
     }
 
-    ajoutGentil(personnage: Gentil) {
+    /**
+     * Rajout d'un personnage au tableau des gentils
+     * @param personnage 
+     */
+    ajoutGentil = (personnage: Gentil) => {
         this.tabGentils.push(personnage);
     }
 
+    /**
+     * Generation des mechants en fonction du nombre de gentils
+     */
     generationMechants = () => {
         let listMechants: Mechant[] = [];
         for(let i = 0; i < this.tabGentils.length; i++) {
