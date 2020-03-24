@@ -1,4 +1,4 @@
-import { Arme } from './Arme'
+import { Arme } from './Arme';
 
 export class Personnage {
     private nom : string;

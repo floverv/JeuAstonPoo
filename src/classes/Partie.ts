@@ -1,6 +1,7 @@
 import { Gentil } from "./Gentil";
 import { Mechant } from "./Mechant";
 import { Arme } from "./Arme";
+import { Personnage } from "./Personnage";
 
 export class Partie {
     private tabGentils: Gentil[];
@@ -17,6 +18,20 @@ export class Partie {
      */
     ajoutGentil = (personnage: Gentil) => {
         this.tabGentils.push(personnage);
+    }
+
+    /**
+     * Supprimer un gentil
+     */
+    supprGentil = (personnage: Gentil) => {
+        return this.tabGentils.splice(this.tabGentils.indexOf(personnage), 1);
+    }
+
+    /**
+     * Supprimer un mechant
+     */
+    supprMechant = (personnage: Mechant) => {
+        return this.tabGentils.splice(this.tabMechants.indexOf(personnage), 1);
     }
 
     /**
