@@ -6,18 +6,58 @@ export class Personnage {
     private pvMax: number;
     private defense: number;
     private arme: Arme;
+    private cible: any = null;
 
     constructor(nom: string, arme: Arme) {
         this.nom = nom;
-        this.pv = 150;
-        this.pvMax = 150;
-        this.defense = 50;
+        this.pv = Math.floor(Math.random() * 100) + 20;
+        this.pvMax = this.pv;
+        this.defense = Math.floor(Math.random() * 50) + 5;
         this.arme = arme;
     }
 
-    attaque = (ennemie: Personnage) => { }
+    /**
+     * Le personnage attaque la cible
+     */
+    attaque = (degat: number) => {
+        let pvCible = this.cible.pv;
+        let nomCible = this.cible.nom;
+        let defenseCible = this.cible.defense;
+        if (this.cible != null) {
+            if (pvCible - (degat-defenseCible) <= 0) {
+                this.cible.pv = (pvCible - degat);
+                console.log(`${this.nom} a attaqué ${nomCible}, il lui reste ${pvCible} pv.`);
+            } else {
+                this.cible.setPv(0);
+                console.log(`${this.nom} a tué ${nomCible}.`);
+            }
+            return pvCible;
+        }
+    }
 
-    cibler = (cible: Personnage) => { }
+    /**
+     * Le personnage cible un ennemie
+     */
+    cibler = (cible: Personnage) => { 
+        this.cible = cible;
+        console.log(`${this.nom} a ciblé ${this.cible.nom}`);
+    }
+
+    /**
+     * Remet à zero la cible
+     */
+    resetCible() {
+        this.cible = null;
+    }
+
+    getCible() {
+        return this.cible;
+    }
+
+    setCible(cible: Personnage) {
+        this.cible = cible;
+    }
+
 
     getNom() {
         return this.nom;
