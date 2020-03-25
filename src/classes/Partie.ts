@@ -1,11 +1,11 @@
 import { Gentil } from "./Gentil";
 import { Mechant } from "./Mechant";
 import { Arme } from "./Arme";
-import { Personnage } from "./Personnage";
 
 export class Partie {
     private tabGentils: Gentil[];
     private tabMechants: Mechant[];
+    private tour: number = 0;
 
     constructor(tabGentils: Gentil[]) {
         this.tabGentils = tabGentils;
@@ -54,5 +54,13 @@ export class Partie {
 
     getTabMechants() {
         return this.tabMechants;
+    }
+
+    getTour() {
+        return this.tour;
+    }
+
+    setTour(tour: number) {
+        this.tour = tour;
     }
 }

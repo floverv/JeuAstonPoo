@@ -1,71 +1,20 @@
-import { Partie } from "./Partie"
-import { Roles } from "./enum/Roles";
-import { Arme } from "./Arme";
-import Hache from "./arme/Hache";
-import Epee from "./arme/Epee";
-import readline from "readline";
+import { Partie } from "./Partie";
 import { Gentil } from "./Gentil";
+import { Mechant } from "./Mechant";
 
 export default class Combat {
 
     private partie: Partie;
+    private cibleGentil: Mechant[] = [];
+    private cibleMechant: Gentil[] = [];
 
     constructor(partie: Partie) {
         this.partie = partie;
     }
 
-    readlineReader = async (question: string) => {
-        let response;
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-            terminal: false
-        })
-        await new Promise((resolve, reject) => {
-            rl.question(`${question}`, (answer: string) => {
-                resolve(answer)
-            })
-        }).then(onfull => {
-            response = onfull;
-            rl.close();
-        })
-    
-        return response;
-    }
-    
-    async creerGentil() {
-        let arme: any;
-        let role: any;
-        
-        let nom = await this.readlineReader('Quel est le nom de votre Hero ?');
-        console.log(`Le nom de votre hero est: ${nom}`);
-
-        let nomArme = await this.readlineReader('Quel est votre arme -> Epee ou Hache ?');
-        while (nomArme != "Epee" && nomArme != "Hache") {
-            console.log(`Le nom de votre arme est incorrect, veuillez choisir entre une Epee ou une Hache`);
-            nomArme = await this.readlineReader('Quel est votre arme -> Epee ou Hache ?');
-        }
-
-        if (nomArme == 'Epee') {
-            arme = new Epee();
-        } else {
-            arme = new Hache();
-        }
-
-        let nameRole = await this.readlineReader('Quel est le votre classe -> [Assassin; Mage; Tank; Guerrier] ?');
-        while (nameRole != "Tank" && nameRole != "Mage") {
-            console.log(`Le nom de votre classee est incorrect, veuillez choisir une classe`);
-            nameRole = await this.readlineReader('Quel est la classe de votre Hero ?');
-        }
-
-        if (nameRole == 'Mage') {
-            role = Roles.Mage;
-        }
-
-        return new Gentil(name, arme, role);
-    }
-
-
+    /**
+     * Verifie si une equipe est morte retourne true
+     */
     verifieMort() {
         let tabGentil = this.partie.getTabGentils();
         let tabMechant = this.partie.getTabMechants();
@@ -81,6 +30,37 @@ export default class Combat {
                 this.partie.supprMechant(perso);
             }
         });
+
+        if (tabGentil.length == 0) {
+            return true;
+        }
+
+        if (tabMechant.length == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    cibler = () => {
+        let tabMechants = this.partie.getTabMechants();
+        let tabGentils = this.partie.getTabGentils();
+        
+        this.partie.getTabGentils().forEach(persoGentil => {
+            let random = Math.floor(Math.random() * tabMechants.length);
+            let persoMechant = tabMechants[random];
+
+            persoGentil.cibler(persoMechant);
+            tabMechants = tabMechants.filter(monstre => monstre != persoMechant)
+        });
+
+        this.partie.getTabMechants().forEach(persoMechant => {
+            let random = Math.floor(Math.random() * tabGentils.length);
+            let persoGentil = tabGentils[random];
+
+            persoMechant.cibler(persoGentil);
+            tabGentils = tabGentils.filter(gentil => gentil != persoGentil)
+        })
     }
 }
 
