@@ -20,9 +20,9 @@ export class Personnage {
      * Le personnage attaque la cible
      */
     attaquer = () => {
-        let pvCible = this.cible.pv;
-        let nomCible = this.cible.nom;
-        let defenseCible = this.cible.defense;
+        let pvCible = this.cible.getPv();
+        let nomCible = this.cible.getNom();
+        let defenseCible = this.cible.getDefense();
         let degat = Math.floor(Math.random() * (this.arme.getDegatMax() - this.arme.getDegatMin()) + this.arme.getDegatMin());
         let CC = this.arme.getTauxCC()/100;
 
@@ -34,17 +34,16 @@ export class Personnage {
         
         //S'il y a une cible
         if (this.cible != null) {
-            console.log(`${this.nom} a inflige ${degat} de degats`);
             //S'il y a encore de l'armure
-            if ((defenseCible - degat) > 0) {
-                defenseCible-= degat;
-                console.log(`${this.nom} a attaqué ${nomCible}, il lui reste ${pvCible} pv et ${defenseCible} de defense.`);
+            if (defenseCible > degat) {
+                this.cible.setDefense(defenseCible - degat);
+                console.log(`${this.nom} a attaqué ${nomCible} avec ${degat} de degats, il lui reste ${pvCible} pv et ${defenseCible} de defense.`);
             } else {
                 //S'il n'a plus d'armure
-                defenseCible = 0;
-                if (pvCible - degat <= 0) {
-                    pvCible-= degat;
-                    console.log(`${this.nom} a attaqué ${nomCible}, il lui reste ${pvCible} pv.`);
+                this.cible.setDefense(0);
+                if (pvCible > degat) {
+                    this.cible.setPv(pvCible - degat);
+                    console.log(`${this.nom} a attaqué ${nomCible} avec ${degat} de degats, il lui reste ${pvCible} pv.`);
                 } else {
                     this.cible.setPv(0);
                     console.log(`${this.nom} a tué ${nomCible}.`);

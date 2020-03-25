@@ -1,12 +1,8 @@
 import { Partie } from "./Partie";
-import { Gentil } from "./Gentil";
-import { Mechant } from "./Mechant";
 
 export default class Combat {
 
     private partie: Partie;
-    private cibleGentil: Mechant[] = [];
-    private cibleMechant: Gentil[] = [];
 
     constructor(partie: Partie) {
         this.partie = partie;
@@ -61,6 +57,20 @@ export default class Combat {
             persoMechant.cibler(persoGentil);
             tabGentils = tabGentils.filter(gentil => gentil != persoGentil)
         })
+    }
+
+    tour = () => {
+        console.log('Tour numero : '+this.partie.getTour());
+        this.partie.setTour(this.partie.getTour() + 1);
+        
+        if (Math.random() <= 0.5) {
+            //Tour des gentils
+            this.partie.getTabGentils().forEach(persoGentil => persoGentil.attaquer());
+        } else {
+            //Tour des mechants
+            this.partie.getTabMechants().forEach(persoMechant => persoMechant.attaquer());
+            
+        }
     }
 }
 

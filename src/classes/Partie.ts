@@ -5,11 +5,12 @@ import { Arme } from "./Arme";
 export class Partie {
     private tabGentils: Gentil[];
     private tabMechants: Mechant[];
-    private tour: number = 0;
+    private tour: number;
 
     constructor(tabGentils: Gentil[]) {
         this.tabGentils = tabGentils;
         this.tabMechants = this.generationMechants();
+        this.tour = 0;
     }
 
     /**
